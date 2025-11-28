@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, ValidationErrors, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { compteDixMots, nomDansCommentaire } from './compteDitMots';
 
 
 @Component({
@@ -17,12 +18,20 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 })
 export class AppComponent {
   title = 'reactive.form';
-
-  
+  formGroup: FormGroup;
 
   constructor(
-    
-  ) { }
+    private fromBuilder: FormBuilder
+  ) {
+    this.formGroup = this.fromBuilder.group({
+      nom: ['', [Validators.required]],
+      numRue: ['', [Validators.required, Validators.min(1000), Validators.max(9999)]],
+      postal: ['', [Validators.pattern("^[A-Z][0-9][A-Z][ ]?[0-9][A-Z][0-9]$")]],
+      commentaire: ['', [compteDixMots()]]
+    },
+    { validators: nomDansCommentaire() }
+  );
+  }
 }
 
 
